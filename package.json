@@ -1,0 +1,35 @@
+{
+  "name": "moral-sentry-claw-hook",
+  "version": "0.1.0",
+  "description": "OpenClaw plugin — intercepts every agent tool call and runs an Objectifiabilism moral calculus, blocking or escalating actions that diverge from the user's ethical priorities stored in Auth0.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "type": "module",
+  "openclaw": {
+    "extensions": [
+      "./index.ts"
+    ]
+  },
+  "scripts": {
+    "build": "tsc",
+    "demo": "npx tsx demo/run-scenarios.ts"
+  },
+  "keywords": [
+    "openclaw",
+    "plugin",
+    "ethics",
+    "auth0",
+    "moral-calculus"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "openai": "^6.33.0",
+    "objectifiabilist": "file:./objectifiabilist"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0",
+    "tsx": "^4.0.0",
+    "@types/node": "^20.0.0"
+  }
+}

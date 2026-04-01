@@ -1,0 +1,9 @@
+node_modules
+.env
+credentials.json
+scratchwork
+auth0-webpages
+objectifiabilist
+moral-sentry-21f6b645aa53.json
+docs
+example-json
