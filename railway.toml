@@ -1,10 +1,6 @@
 [build]
 builder = "nixpacks"
-buildCommand = "npm install --omit=dev"
 
 [deploy]
 startCommand = "npx tsx dev/gateway.ts"
 restartPolicyType = "on_failure"
-
-[build.nixpacksPlan.phases.setup]
-nixPkgs = ["nodejs_20"]
