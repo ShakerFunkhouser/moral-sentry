@@ -326,7 +326,7 @@ export function Dashboard() {
               </div>
             ) : (
               <a
-                href="/api/auth/login"
+                href="/api/auth/login?prompt=login"
                 className="rounded-md bg-indigo-600 px-3 py-1 text-xs font-semibold text-white hover:bg-indigo-500"
               >
                 Sign in with Auth0

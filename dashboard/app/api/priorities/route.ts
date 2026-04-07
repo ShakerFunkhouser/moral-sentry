@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
+import { auth0 } from "@/lib/auth0";
 
 const DOMAIN = process.env.AUTH0_DOMAIN;
 const CLIENT_ID = process.env.AUTH0_CLIENT_ID;
 const CLIENT_SECRET = process.env.AUTH0_CLIENT_SECRET;
-const TEST_EMAIL = process.env.AUTH0_TEST_USERNAME;
 
 let cachedMgmtToken: { value: string; expiresAt: number } | null = null;
 
@@ -45,29 +45,23 @@ async function getMgmtToken(): Promise<string> {
   return access_token;
 }
 
-async function getUserId(token: string): Promise<string> {
-  const url = `https://${DOMAIN}/api/v2/users-by-email?email=${encodeURIComponent(TEST_EMAIL!)}&fields=user_id&include_fields=true`;
-  const res = await fetch(url, {
-    headers: { Authorization: `Bearer ${token}` },
-  });
-  const text = await res.text();
-  if (!res.ok) throw new Error(`User lookup failed (${res.status}): ${text}`);
-  const users = JSON.parse(text) as Array<{ user_id: string }>;
-  if (!users.length) throw new Error(`No Auth0 user found for ${TEST_EMAIL}`);
-  return users[0].user_id;
-}
-
 export async function POST(req: NextRequest) {
   try {
-    if (!DOMAIN || !CLIENT_ID || !CLIENT_SECRET || !TEST_EMAIL) {
+    if (!DOMAIN || !CLIENT_ID || !CLIENT_SECRET) {
       return NextResponse.json(
         {
           error:
-            "Missing Auth0 env vars (AUTH0_DOMAIN, AUTH0_CLIENT_ID, AUTH0_CLIENT_SECRET, AUTH0_TEST_USERNAME)",
+            "Missing Auth0 env vars (AUTH0_DOMAIN, AUTH0_CLIENT_ID, AUTH0_CLIENT_SECRET)",
         },
         { status: 500 },
       );
     }
+
+    const session = await auth0.getSession();
+    if (!session?.user?.sub) {
+      return NextResponse.json({ error: "Not signed in" }, { status: 401 });
+    }
+    const userId = session.user.sub as string;
 
     const body = (await req.json()) as {
       moral_priorities?: Record<string, number>;
@@ -80,7 +74,6 @@ export async function POST(req: NextRequest) {
     }
 
     const token = await getMgmtToken();
-    const userId = await getUserId(token);
 
     const patchRes = await fetch(
       `https://${DOMAIN}/api/v2/users/${encodeURIComponent(userId)}`,
