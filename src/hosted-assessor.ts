@@ -1,11 +1,11 @@
-// Moral Sentry — Hosted ImpactAssessor
+// Moral Sentry - Hosted ImpactAssessor
 //
 // Default implementation of ImpactAssessor that calls the Moral Sentry hosted
 // assessment API. The actual LLM + prompt engineering stay private on the server;
 // this file is safe to publish. Rate-limiting is handled by the API.
 //
 // Anyone can supply their own ImpactAssessor implementation conforming to the
-// interface in types.ts — swap in any LLM or rules engine you like.
+// interface in types.ts - swap in any LLM or rules engine you like.
 
 import type {
   ImpactAssessor,
@@ -38,7 +38,7 @@ export interface HostedAssessorOptions {
  * calibration that produce reliable scores are server-side and not published.
  *
  * On network error or rate-limit the assessor returns an empty assessment
- * (neutral), which causes the calculus to allow the action — fail-open by
+ * (neutral), which causes the calculus to allow the action - fail-open by
  * default. Operators who prefer fail-closed can catch the empty case in index.ts.
  */
 export class HostedAssessor implements ImpactAssessor {
@@ -74,7 +74,7 @@ export class HostedAssessor implements ImpactAssessor {
       res = await fetch(this.apiUrl, { method: "POST", headers, body });
     } catch (err) {
       console.warn(
-        "[moral-sentry] Hosted assessor unreachable — returning neutral assessment",
+        "[moral-sentry] Hosted assessor unreachable - returning neutral assessment",
       );
       return { facetRanges: [] };
     }
@@ -82,7 +82,7 @@ export class HostedAssessor implements ImpactAssessor {
     if (res.status === 429) {
       const retryAfter = res.headers.get("Retry-After");
       console.warn(
-        `[moral-sentry] Rate limited by hosted assessor${retryAfter ? ` — retry after ${retryAfter}s` : ""}. ` +
+        `[moral-sentry] Rate limited by hosted assessor${retryAfter ? ` - retry after ${retryAfter}s` : ""}. ` +
           "Set MORAL_SENTRY_API_KEY for a higher limit.",
       );
       return { facetRanges: [] };
@@ -90,7 +90,7 @@ export class HostedAssessor implements ImpactAssessor {
 
     if (!res.ok) {
       console.error(
-        `[moral-sentry] Hosted assessor returned ${res.status} — returning neutral assessment`,
+        `[moral-sentry] Hosted assessor returned ${res.status} - returning neutral assessment`,
       );
       return { facetRanges: [] };
     }

@@ -22,8 +22,8 @@ declare module "openclaw/plugin-sdk/plugin-entry" {
   }
 
   export interface ApprovalOptions {
-    title: string;
-    description: string;
+    title?: string;
+    description?: string;
     severity?: "low" | "medium" | "high" | "critical";
     timeoutMs?: number;
     timeoutBehavior?: "deny" | "allow";
@@ -33,7 +33,7 @@ declare module "openclaw/plugin-sdk/plugin-entry" {
   export type BeforeToolCallResult =
     | { block?: false; blockReason?: undefined; requireApproval?: undefined } // allow
     | { block: true; blockReason?: string; requireApproval?: undefined } // hard block
-    | { block?: undefined; requireApproval: ApprovalOptions }; // escalate
+    | { block?: undefined; requireApproval: true | ApprovalOptions }; // escalate (minimal or rich)
 
   export interface PluginRegistrationAPI {
     pluginConfig?: Record<string, unknown>;
@@ -51,6 +51,7 @@ declare module "openclaw/plugin-sdk/plugin-entry" {
     name?: string;
     description?: string;
     kind?: string;
+    configSchema?: unknown;
     register: (api: PluginRegistrationAPI) => void;
   }
 

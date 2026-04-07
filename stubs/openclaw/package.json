@@ -1,0 +1,12 @@
+{
+  "name": "openclaw",
+  "version": "0.0.0",
+  "description": "Stub for openclaw/plugin-sdk - used when running outside the real OpenClaw runtime (dev gateway, tests).",
+  "type": "module",
+  "exports": {
+    "./plugin-sdk/plugin-entry": {
+      "types": "./plugin-sdk/plugin-entry.d.ts",
+      "default": "./plugin-sdk/plugin-entry.js"
+    }
+  }
+}

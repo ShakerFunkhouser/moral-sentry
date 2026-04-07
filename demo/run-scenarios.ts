@@ -1,5 +1,5 @@
 #!/usr/bin/env tsx
-// Moral Sentry — Demo: Run all example scenarios through the calculus
+// Moral Sentry - Demo: Run all example scenarios through the calculus
 // This script does NOT require OpenClaw to be running.
 // It loads the pre-built ImpactAssessments from example-json/ and feeds them
 // directly through the calculus bridge, printing an audit result for each.
@@ -82,7 +82,7 @@ function bar(value: number, width = 20): string {
   return `[${"█".repeat(filled)}${"░".repeat(width - filled)}] ${sign}${value.toFixed(2)}`;
 }
 
-console.log(`${BOLD}━━━ Moral Sentry — Scenario Demo ━━━${RESET}\n`);
+console.log(`${BOLD}━━━ Moral Sentry - Scenario Demo ━━━${RESET}\n`);
 console.log(`Using DEFAULT priority weights:\n`);
 for (const facet of DEFAULT_FACETS) {
   const w = DEFAULT_PRIORITY_WEIGHTS[facet.name] ?? 0.5;

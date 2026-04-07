@@ -1,4 +1,4 @@
-// Moral Sentry — Auth0 integration
+// Moral Sentry - Auth0 integration
 // Fetches a user's moral priority weights from Auth0 user_metadata via the Management API.
 // Falls back to DEFAULT_PRIORITY_WEIGHTS when credentials are absent or the user has no custom priorities.
 
@@ -20,6 +20,11 @@ function getAuth0Config(): Auth0Config | null {
 }
 
 let cachedToken: { value: string; expiresAt: number } | null = null;
+
+/** @internal - used only in tests to clear the module-level M2M token cache. */
+export function _resetTokenCache(): void {
+  cachedToken = null;
+}
 
 /**
  * Obtain a Management API access token via the client_credentials grant.
@@ -101,7 +106,7 @@ export async function getPriorityWeights(
   const cfg = getAuth0Config();
   if (!cfg) {
     console.warn(
-      "[moral-sentry] Auth0 not configured — using default priority weights",
+      "[moral-sentry] Auth0 not configured - using default priority weights",
     );
     return { ...DEFAULT_PRIORITY_WEIGHTS };
   }
@@ -121,7 +126,7 @@ export async function getPriorityWeights(
       return merged;
     }
   } catch (err) {
-    console.error("[moral-sentry] Auth0 fetch failed — using defaults:", err);
+    console.error("[moral-sentry] Auth0 fetch failed - using defaults:", err);
   }
 
   return { ...DEFAULT_PRIORITY_WEIGHTS };
@@ -137,7 +142,7 @@ export async function getPriorityWeights(
  *   subject_token = the user's Auth0 refresh token (not a Management API token)
  *   connection    = the social connection name ("github" or "google-oauth2")
  *
- * Prerequisites — see readme for full setup guide:
+ * Prerequisites - see readme for full setup guide:
  *   1. Social connection: Authentication > Social Connections > [connection] > Purpose >
  *      toggle "Connected Accounts for Token Vault" ON.
  *   2. Application grant types: Advanced Settings > Grant Types >
@@ -160,7 +165,9 @@ export async function requestVaultToken(
 ): Promise<string | null> {
   const cfg = getAuth0Config();
   if (!cfg) {
-    console.warn("[moral-sentry] Auth0 not configured — Token Vault unavailable");
+    console.warn(
+      "[moral-sentry] Auth0 not configured - Token Vault unavailable",
+    );
     return null;
   }
 
@@ -173,6 +180,9 @@ export async function requestVaultToken(
     // The app must have been granted the Token Vault grant type and MRRT must be enabled.
     subject_token: userRefreshToken,
     subject_token_type: "urn:ietf:params:oauth:token-type:refresh_token",
+    // Auth0-specific token type for federated connection access tokens
+    requested_token_type:
+      "http://auth0.com/oauth/token-type/federated-connection-access-token",
     // connection selects which Token Vault entry to retrieve
     connection,
   };
@@ -191,10 +201,23 @@ export async function requestVaultToken(
 
     if (!res.ok) {
       const text = await res.text();
+
+      // 401 federated_connection_refresh_token_not_found = account not connected yet
+      // (same semantic as 404 - show the Connect Account button)
+      try {
+        const json = JSON.parse(text) as { error?: string };
+        if (json.error === "federated_connection_refresh_token_not_found") {
+          return null;
+        }
+      } catch {
+        /* ignore parse errors */
+      }
+
+      const msg = `Auth0 Token Vault ${res.status}: ${text}`;
       console.error(
         `[moral-sentry] Token Vault exchange failed (${res.status}) for connection=${connection}: ${text}`,
       );
-      return null;
+      throw new Error(msg);
     }
 
     const data = (await res.json()) as { access_token?: string };

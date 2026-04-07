@@ -1,6 +1,7 @@
 node_modules
 .env
 credentials.json
+.gateway-state.json
 scratchwork
 auth0-webpages
 objectifiabilist

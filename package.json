@@ -1,7 +1,7 @@
 {
-  "name": "moral-sentry-claw-hook",
+  "name": "moral-sentry",
   "version": "0.1.0",
-  "description": "OpenClaw plugin — intercepts every agent tool call and runs an Objectifiabilism moral calculus, blocking or escalating actions that diverge from the user's ethical priorities stored in Auth0.",
+  "description": "OpenClaw plugin - intercepts every agent tool call and runs an Objectifiabilism moral calculus, blocking or escalating actions that diverge from the user's ethical priorities stored in Auth0.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "type": "module",
@@ -12,7 +12,10 @@
   },
   "scripts": {
     "build": "tsc",
-    "demo": "npx tsx demo/run-scenarios.ts"
+    "demo": "npx tsx demo/run-scenarios.ts",
+    "dev-gateway": "npx tsx dev/gateway.ts",
+    "test": "vitest run --config vitest.config.ts",
+    "dev-dashboard": "cd dashboard && npm run dev"
   },
   "keywords": [
     "openclaw",
@@ -24,12 +27,14 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "openai": "^6.33.0",
-    "objectifiabilist": "file:./objectifiabilist"
+    "objectifiabilist": "^0.1.0",
+    "openai": "^6.33.0"
   },
   "devDependencies": {
-    "typescript": "^5.0.0",
+    "@types/node": "^20.0.0",
+    "openclaw": "file:./stubs/openclaw",
     "tsx": "^4.0.0",
-    "@types/node": "^20.0.0"
+    "typescript": "^5.0.0",
+    "vitest": "^4.1.2"
   }
 }

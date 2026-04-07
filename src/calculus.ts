@@ -1,4 +1,4 @@
-// Moral Sentry — calculus bridge
+// Moral Sentry - calculus bridge
 // Maps an ImpactAssessment + PriorityWeights into objectifiabilist types,
 // runs the moral calculus, and returns a structured AuditResult.
 
@@ -80,7 +80,7 @@ function buildEthic(weights: PriorityWeights): Ethic {
  *
  * Strategy:
  *   - "execute" choice: uses the `likely` value for each facet
- *   - "defer"   choice: all facets are neutral (0) — deferring has no direct impact
+ *   - "defer"   choice: all facets are neutral (0) - deferring has no direct impact
  *
  * Divergence is computed as the normalised absolute difference in preferability
  * ordinals between the two choices, scaled to [0, 1].

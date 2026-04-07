@@ -1,4 +1,4 @@
-// Moral Sentry — internal types
+// Moral Sentry - internal types
 // These types describe the impact assessment output and the audit result
 // produced by the calculus bridge.
 
