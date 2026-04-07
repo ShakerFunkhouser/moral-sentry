@@ -3,6 +3,3 @@ cmds = ["npm install --omit=dev"]
 
 [phases.build]
 cmds = []
-
-[start]
-cmd = "npx tsx dev/gateway.ts"
