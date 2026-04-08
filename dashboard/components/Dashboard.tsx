@@ -271,8 +271,7 @@ export function Dashboard() {
               </span>
             </h1>
             <p className="text-xs text-zinc-600 mt-0.5">
-              OpenClaw plugin · Objectifiabilist moral calculus · Auth0 Token
-              Vault
+              Objectifiabilist moral calculus · Auth0 Token Vault
             </p>
           </div>
           <div className="flex items-center gap-3">

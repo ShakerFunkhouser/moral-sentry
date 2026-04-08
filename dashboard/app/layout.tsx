@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Moral Sentry - Dev Dashboard",
   description:
-    "OpenClaw plugin demo: Objectifiabilist moral calculus with Auth0 Token Vault",
+    "Moral Sentry: Objectifiabilist moral calculus with Auth0 Token Vault",
 };
 
 export default function RootLayout({
